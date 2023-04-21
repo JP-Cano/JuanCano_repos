@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { from, Observable } from 'rxjs';
 import { OrganizationEntityInterface } from '../domain/models/organization.entity';
@@ -33,7 +25,7 @@ export class OrganizationController {
 
   @ApiOperation({
     operationId: 'organization_create',
-    description: 'Endpoint to create a new organization',
+    summary: 'Endpoint to create a new organization',
   })
   @ApiOkResponse({
     description: 'Organization created successfully',
@@ -49,7 +41,7 @@ export class OrganizationController {
 
   @ApiOperation({
     operationId: 'organization_findAll',
-    description: 'Endpoint to find all organizations',
+    summary: 'Endpoint to find all organizations',
   })
   @Get()
   public findAllOrganizations(): Observable<OrganizationDto[]> {
@@ -58,7 +50,7 @@ export class OrganizationController {
 
   @ApiOperation({
     operationId: 'organization_delete',
-    description: 'Endpoint to delete a organization by its ID',
+    summary: 'Endpoint to delete a organization by its ID',
   })
   @Delete(':id')
   public deleteOrganization(
@@ -69,7 +61,7 @@ export class OrganizationController {
 
   @ApiOperation({
     operationId: 'organization_update',
-    description: 'Endpoint to update a organization',
+    summary: 'Endpoint to update a organization',
   })
   @Patch(':id')
   public updateOrganization(

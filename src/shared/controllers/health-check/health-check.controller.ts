@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   HealthCheck,
   HealthCheckResult,
@@ -17,6 +17,9 @@ export class HealthCheckController {
     private readonly database: TypeOrmHealthIndicator,
   ) {}
 
+  @ApiOperation({
+    summary: 'Endpoint to check server and database connection status',
+  })
   @Get()
   @HealthCheck()
   public async check(): Promise<HealthCheckResult> {

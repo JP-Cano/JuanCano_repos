@@ -12,12 +12,12 @@ import {
   switchMap,
 } from 'rxjs';
 import { Repository } from 'typeorm';
+import { ResponseMessage } from '../../../shared/infrastructure/constants/response.enum';
 import { OrganizationRepository } from '../../domain/models/gateways/organization.repository';
 import {
   OrganizationEntity,
   OrganizationEntityInterface,
 } from '../../domain/models/organization.entity';
-import { ResponseMessage } from '../../infrastructure/constants/response.enum';
 import { OrganizationData } from './data/organization.data';
 
 export class OrganizationAdapter implements OrganizationRepository {
@@ -37,9 +37,10 @@ export class OrganizationAdapter implements OrganizationRepository {
       switchMap(() =>
         from(this.organizationData.delete(id)).pipe(
           map(() => ResponseMessage.ORGANIZATION_DELETED_SUCCESSFULLY),
-          catchError(() => {
+          catchError((error) => {
             throw new InternalServerErrorException(
               ResponseMessage.FAILED_TO_DELETE_ORGANIZATION,
+              error.message,
             );
           }),
         ),
