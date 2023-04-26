@@ -1,7 +1,8 @@
 import { registerAs } from '@nestjs/config';
+import { PROCESS } from '../../../constants/process.constant';
 import { TYPEORM_POSTGRES_CONFIG } from '../../../constants/token';
 
-interface PostgresConfig {
+interface PostgresConfigInterface {
   database: string;
   port: number;
   host: string;
@@ -11,10 +12,10 @@ interface PostgresConfig {
 
 export const PostgresConfig = registerAs(TYPEORM_POSTGRES_CONFIG, () => ({
   postgres: {
-    database: process.env.DATABASE,
-    port: Number(process.env.PORT),
-    host: process.env.HOST,
-    username: process.env.DB_USERNAME,
-    password: process.env.PASSWORD,
-  } as PostgresConfig,
+    database: PROCESS.DATABASE,
+    port: Number(PROCESS.PORT),
+    host: PROCESS.HOST,
+    username: PROCESS.DB_USERNAME,
+    password: PROCESS.PASSWORD,
+  } as PostgresConfigInterface,
 }));

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { map, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   MockRepositoryEntity,
   MockRepositoryEntityInterface,
@@ -10,19 +10,5 @@ import { FindMockRepositoryInterface } from './interfaces/find-mock-repository.i
 export class FindMockRepositoryService implements FindMockRepositoryInterface {
   public findMockRepository(): Observable<MockRepositoryEntityInterface> {
     return of(MockRepositoryEntity);
-  }
-
-  public findMockRepositoryById(
-    id: number,
-  ): Observable<MockRepositoryEntityInterface> {
-    return of(MockRepositoryEntity).pipe(
-      map((repositories) =>
-        repositories?.repositories?.find((repository) => repository.id === id),
-      ),
-      map(
-        (foundRepository) =>
-          foundRepository as unknown as MockRepositoryEntityInterface,
-      ),
-    );
   }
 }
