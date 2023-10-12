@@ -3,14 +3,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  catchError,
-  defaultIfEmpty,
-  from,
-  map,
-  Observable,
-  switchMap,
-} from 'rxjs';
+import { catchError, from, map, Observable, switchMap } from 'rxjs';
 import { Repository } from 'typeorm';
 import { ResponseMessage } from '../../../shared/infrastructure/constants/response.enum';
 import { OrganizationRepository } from '../../domain/models/gateways/organization.repository';
@@ -34,8 +27,8 @@ export class OrganizationAdapter implements OrganizationRepository {
 
   public deleteOrganization(id: number): Observable<string> {
     return this.findOrganizationById(id).pipe(
-      switchMap(() =>
-        from(this.organizationData.delete(id)).pipe(
+      switchMap((res) =>
+        from(this.organizationData.delete(res.id)).pipe(
           map(() => ResponseMessage.ORGANIZATION_DELETED_SUCCESSFULLY),
           catchError((error) => {
             throw new InternalServerErrorException(
@@ -45,7 +38,6 @@ export class OrganizationAdapter implements OrganizationRepository {
           }),
         ),
       ),
-      map((response) => response as string),
     );
   }
 
@@ -59,7 +51,6 @@ export class OrganizationAdapter implements OrganizationRepository {
     id: number,
   ): Observable<OrganizationEntityInterface> {
     return from(this.organizationData.findOneBy({ id })).pipe(
-      defaultIfEmpty(null),
       map((result) => {
         if (!result) {
           throw new NotFoundException(ResponseMessage.ORGANIZATION_NOT_FOUND);
@@ -73,9 +64,12 @@ export class OrganizationAdapter implements OrganizationRepository {
     id: number,
     organization: Partial<OrganizationEntity>,
   ): Observable<string> {
-    return from(this.organizationData.update(id, organization)).pipe(
-      switchMap(() => this.findOrganizationById(id)),
-      map(() => ResponseMessage.ORGANIZATION_UPDATED_SUCCESSFULLY),
+    return this.findOrganizationById(id).pipe(
+      switchMap((res) =>
+        from(this.organizationData.update(res.id, organization)).pipe(
+          map(() => ResponseMessage.ORGANIZATION_UPDATED_SUCCESSFULLY),
+        ),
+      ),
     );
   }
 }

@@ -24,6 +24,7 @@ export class RepositoryMetricsCsvGeneratorService
       .pipe(
         concatMap((result) => {
           const records = result.repositories.map((repo) => ({ ...repo }));
+          console.log(records);
           return from(csvWriter.writeRecords(records)).pipe(map(() => records));
         }),
       );
